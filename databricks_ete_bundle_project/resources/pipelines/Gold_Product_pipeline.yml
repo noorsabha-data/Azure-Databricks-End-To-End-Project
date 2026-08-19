@@ -1,0 +1,17 @@
+resources:
+  pipelines:
+    pipeline_gold_product:
+      name: Gold Product
+      libraries:
+        - glob:
+            include: ../../src/pipelines/Gold
+              Product (2)/transformations/**
+      schema: gold
+      continuous: false
+      development: false
+      photon: true
+      channel: CURRENT
+      catalog: ${var.catalog_name}
+      serverless: true
+      root_path: ../../src/pipelines/Gold
+        Product (2)
