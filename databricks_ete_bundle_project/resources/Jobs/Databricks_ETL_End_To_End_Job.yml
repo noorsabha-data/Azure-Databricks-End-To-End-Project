@@ -1,0 +1,66 @@
+resources:
+  jobs:
+    Databricks_ETL_End_To_End_Job:
+      name: Databricks_ETL_End_To_End_Job
+      tasks:
+        - task_key: Parameters
+          notebook_task:
+            notebook_path: ../../src/notebooks/parameters.ipynb
+            source: WORKSPACE
+        - task_key: Bronze_Ingestion
+          depends_on:
+            - task_key: Parameters
+          for_each_task:
+            inputs: "{{tasks.Parameters.values.output_datasets}}"
+            task:
+              task_key: Bronze_Ingestion_iteration
+              notebook_task:
+                notebook_path: ../../src/notebooks/Bronze
+                  Layer.ipynb
+                base_parameters:
+                  file_name: "{{input.file_name}}"
+                source: WORKSPACE
+        - task_key: Silver_Customers
+          depends_on:
+            - task_key: Bronze_Ingestion
+          notebook_task:
+            notebook_path: ../../src/notebooks/Silver_Customers.ipynb
+            source: WORKSPACE
+        - task_key: Silver_Products
+          depends_on:
+            - task_key: Bronze_Ingestion
+          notebook_task:
+            notebook_path: ../../src/notebooks/Silver_Products.ipynb
+            source: WORKSPACE
+        - task_key: Silver_order
+          depends_on:
+            - task_key: Bronze_Ingestion
+          notebook_task:
+            notebook_path: ../../src/notebooks/Silver_Orders.ipynb
+            source: WORKSPACE
+        - task_key: Gold_Customers
+          depends_on:
+            - task_key: Silver_Customers
+            - task_key: Silver_Products
+            - task_key: Silver_order
+          notebook_task:
+            notebook_path: ../../src/notebooks/Gold_Customers.ipynb
+            source: WORKSPACE
+        - task_key: Gold_Products_sdp
+          depends_on:
+            - task_key: Silver_Customers
+            - task_key: Silver_Products
+            - task_key: Silver_order
+          pipeline_task:
+            pipeline_id: 96d6d4cd-a797-4169-8a92-01e8ed7cc034
+        - task_key: Gold_Fact
+          depends_on:
+            - task_key: Gold_Products_sdp
+            - task_key: Gold_Customers
+          notebook_task:
+            notebook_path: ../../src/notebooks/Gold_Orders.ipynb
+            source: WORKSPACE
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
+

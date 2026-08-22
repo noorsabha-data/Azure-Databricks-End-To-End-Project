@@ -1,11 +1,10 @@
 resources:
   pipelines:
-    pipeline_gold_product:
-      name: Gold Product
+    pipeline_gold_product_dim_pipeline:
+      name: Gold_Product_Dim_Pipeline
       libraries:
         - glob:
-            include: ../../src/pipelines/Gold
-              Product (2)/transformations/**
+            include: ../../src/pipelines/Gold_Product_Dim_Pipeline/transformations/**
       schema: gold
       continuous: false
       development: false
@@ -13,5 +12,4 @@ resources:
       channel: CURRENT
       catalog: ${var.catalog_name}
       serverless: true
-      root_path: ../../src/pipelines/Gold
-        Product (2)
+      root_path: ../../src/pipelines/Gold_Product_Dim_Pipeline
