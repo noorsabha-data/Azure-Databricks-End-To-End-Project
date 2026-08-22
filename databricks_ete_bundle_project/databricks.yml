@@ -21,12 +21,12 @@ targets:
       name_prefix: dev_${workspace.current_user.short_name}
       source_linked_deployment: false
     workspace:
-      host: https://adb-7405618178397965.5.azuredatabricks.net/
+      host: https://adb-7405604470981135.15.azuredatabricks.net/
     
   prod:
     mode: production
     workspace:
-      host: https://adb-7405618178397965.5.azuredatabricks.net/
+      host: https://adb-7405604470981135.15.azuredatabricks.net/
       # We explicitly deploy to /Workspace/Users/shaikhsalim124@gmail.com to make sure we only have a single copy.
       root_path: /Workspace/Users/shaikhsalim124@gmail.com/PROD/.bundle/${bundle.name}/${bundle.target}
     
